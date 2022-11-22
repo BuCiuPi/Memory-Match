@@ -96,7 +96,6 @@ public class MatchItemUI : MonoBehaviour, IItemCard
     {
         // animation
         OpenAnimTrigger();
-        Debug.Log("isCalledbackToIdle");
         SetOpenState(!_itemInfo.IsOpened);
     }
 

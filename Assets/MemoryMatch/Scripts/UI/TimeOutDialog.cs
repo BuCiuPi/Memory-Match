@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class TimeOutDialog : Dialog
 {
+    public GameManager gameManager;
     public void BackToMenu()
     {
         if (SceneController.Ins)
@@ -13,11 +14,8 @@ public class TimeOutDialog : Dialog
 
     public void Replay()
     {
-        SceneManager.sceneLoaded += OnSceneLoadEvent;
-        if (SceneController.Ins)
-        {
-            SceneController.Ins.LoadCurrentScene();
-        }
+        gameObject.SetActive(false);
+        gameManager?.PlayGame();
     }
 
     public void OnSceneLoadEvent(Scene scene , LoadSceneMode mode)

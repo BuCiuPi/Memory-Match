@@ -92,7 +92,7 @@ public class CardInventoryController : MonoBehaviour
                 var child = _itemContainer.GetChild(i);
                 if (child)
                 {
-                    Destroy(child);
+                    Destroy(child.gameObject);
                 }
             }
 

@@ -10,7 +10,6 @@ public class CountDownTiming : MonoBehaviour
     [SerializeField] private FloatEventChannel _OnStartCountDown;
     [SerializeField] private VoidEventChannel _OnPauseCountDown;
     [SerializeField] private VoidEventChannel _OnContinueCountDown;
-    [SerializeField] private VoidEventChannel _OnSetEndCountDown;
 
     [Header("Event Raiser")]
     [SerializeField] private VoidEventChannel _EndCountDown;
@@ -44,7 +43,6 @@ public class CountDownTiming : MonoBehaviour
         if (_OnStartCountDown) _OnStartCountDown.OnEventRaised += StartCountDown;
         if (_OnPauseCountDown) _OnPauseCountDown.OnEventRaised += PauseCountDown;
         if (_OnContinueCountDown) _OnContinueCountDown.OnEventRaised += ContinueCountDown;
-        if (_OnSetEndCountDown) _OnSetEndCountDown.OnEventRaised += EndCountDown;
     }
 
     void OnDisable()
@@ -52,7 +50,6 @@ public class CountDownTiming : MonoBehaviour
         if (_OnStartCountDown) _OnStartCountDown.OnEventRaised -= StartCountDown;
         if (_OnPauseCountDown) _OnPauseCountDown.OnEventRaised -= PauseCountDown;
         if (_OnContinueCountDown) _OnContinueCountDown.OnEventRaised -= ContinueCountDown;
-        if (_OnSetEndCountDown) _OnSetEndCountDown.OnEventRaised -= EndCountDown;
     }
 
     #endregion
@@ -79,10 +76,10 @@ public class CountDownTiming : MonoBehaviour
     private void UpdateTimeBySec()
     {
         int currentSecLeft = Mathf.FloorToInt(_timeLeft);
-        if (currentSecLeft < _LastSecLeft)
+        if (currentSecLeft < _LastSecLeft && currentSecLeft >= 0)
         {
-            _LastSecLeft = _secLeft;
             _secLeft = currentSecLeft;
+            _LastSecLeft = _secLeft;
 
             _CountDownTimeChangePerSec?.RaiseEvent(currentSecLeft);
         }
@@ -111,7 +108,7 @@ public class CountDownTiming : MonoBehaviour
     /// <param name="time">second</param>
     public void StartCountDown(float time)
     {
-        _timeLeft = _timeLimit;
+        _timeLeft = _LastSecLeft = _timeLimit = time;
         _state = CountDownState.Start;
     }
 

@@ -7,7 +7,7 @@ public class PauseDialog : Dialog
     {
         Time.timeScale = 0f;
         base.Show(isShow);
-        
+        Debug.Log("PauseDialogIsShow");
     }
     public void Resume()
     {

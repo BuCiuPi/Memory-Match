@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioController : Singleton<AudioController>
 {
+    
     [Header("Main Settings:")]
     [Range(0, 1)]
     public float musicVolume = 0.3f;
@@ -15,11 +16,29 @@ public class AudioController : Singleton<AudioController>
     public AudioSource sfxAus;
 
     [Header("Game sounds and musics: ")]
-    public AudioClip right;
-    public AudioClip wrong;
-    public AudioClip timeOut;
-    public AudioClip gameover;
-    public AudioClip[] backgroundMusics;
+    public AudioInfoSO[] BackgroundMusic;
+    public AudioInfoSO[] SoundEffect;
+
+    Dictionary<string, AudioInfoSO> Audios;
+
+    public override void Awake()
+    {
+        MakeSingleton(false);
+        Init();
+    }
+
+    private void Init(){
+        Audios = new Dictionary<string, AudioInfoSO>();
+        foreach (var item in BackgroundMusic)
+        {
+            Audios.Add(item.ID,item);
+        }
+
+        foreach (var item in SoundEffect)
+        {
+            Audios.Add(item.ID,item);
+        }
+    }
 
     /// <summary>
     /// Play Sound Effect
@@ -55,6 +74,22 @@ public class AudioController : Singleton<AudioController>
         if (clip != null && aus)
         {
             aus.PlayOneShot(clip, sfxVolume);
+        }
+    }
+
+    public void PlaySound(string clipID, AudioSource aus = null)
+    {
+        if(!Audios.ContainsKey(clipID)) return;
+        if (!aus)
+        {
+            aus = sfxAus;
+        }
+
+        AudioClip targetClip = Audios[clipID]?.AudioClip;
+
+        if (targetClip!= null && aus)
+        {
+            aus.PlayOneShot(targetClip, sfxVolume);
         }
     }
 
@@ -111,6 +146,12 @@ public class AudioController : Singleton<AudioController>
 
     public void PlayBackgroundMusic()
     {
-        PlayMusic(backgroundMusics, true);
+        List<AudioClip> clips = new List<AudioClip>();
+        foreach (var item in BackgroundMusic)
+        {
+            clips.Add(item.AudioClip);
+        }
+
+        PlayMusic(clips.ToArray(), true);
     }
 }

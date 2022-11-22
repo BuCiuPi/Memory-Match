@@ -73,7 +73,7 @@ public class GamePlayController : MonoBehaviour
             if (!firstAnswer.IsDifference(_answer[i]))
             {
                 if (AudioController.Ins)
-                    AudioController.Ins.PlaySound(AudioController.Ins.wrong);
+                    AudioController.Ins.PlaySound("SE_Wrong");
 
                 return false;
             }
@@ -81,7 +81,7 @@ public class GamePlayController : MonoBehaviour
 
 
         if (AudioController.Ins)
-            AudioController.Ins.PlaySound(AudioController.Ins.right);
+            AudioController.Ins.PlaySound("SE_Right");
 
         return true;
     }

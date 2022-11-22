@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private VoidEventChannel _OnPlusTotalMoving;
     [SerializeField] private VoidEventChannel _OnPlusMatchedCard;
 
+    [SerializeField] private VoidEventChannel _OnEndCountDown;
+
     [Header("Event Raiser")]
     [SerializeField] private IntEventChannel _SetGameState;
 
@@ -26,28 +29,27 @@ public class GameManager : MonoBehaviour
     [SerializeField] private VoidEventChannel _GameContinue;
     [SerializeField] private VoidEventChannel _GameEnd;
 
+    [SerializeField] private FloatEventChannel _OnStartCountDown;
+
     private int _totalMatchItem;
     private int _totalMoving;
     private int _rightMoving;
 
     #region Build-In Func
 
-    private void Start()
-    {
-        _totalMatchItem = cardInventoryController.Init();
-        gamePlayController.Init();
-    }
 
     private void OnEnable()
     {
         if (_OnPlusTotalMoving) _OnPlusTotalMoving.OnEventRaised += PlusTotalMoving;
         if (_OnPlusMatchedCard) _OnPlusMatchedCard.OnEventRaised += PlusMatchesCard;
+        if (_OnEndCountDown) _OnEndCountDown.OnEventRaised += OnGameOver;
     }
 
     private void OnDisable()
     {
         if (_OnPlusTotalMoving) _OnPlusTotalMoving.OnEventRaised -= PlusTotalMoving;
         if (_OnPlusMatchedCard) _OnPlusMatchedCard.OnEventRaised -= PlusMatchesCard;
+        if (_OnEndCountDown) _OnEndCountDown.OnEventRaised -= OnGameOver;
     }
 
     public void PlusTotalMoving()
@@ -75,7 +77,13 @@ public class GameManager : MonoBehaviour
 
     public void PlayGame()
     {
+        Time.timeScale = 0f;
+        _totalMatchItem = cardInventoryController.Init();
+        gamePlayController.Init();
         PlayMusic();
+        _GameStart?.RaiseEvent();
+        _OnStartCountDown.RaiseEvent(15f);
+        Time.timeScale = 1f;
     }
 
     #endregion
@@ -86,8 +94,16 @@ public class GameManager : MonoBehaviour
     {
         if (_rightMoving == _totalMatchItem)
         {
-            _GameEnd?.RaiseEvent();
+            OnGameOver();
         }
+    }
+
+    private void OnGameOver()
+    {
+        _GameEnd?.RaiseEvent();
+        Time.timeScale = 0f;
+        if (AudioController.Ins)
+            AudioController.Ins.PlaySound("SE_TimeOut");
     }
 
     #endregion

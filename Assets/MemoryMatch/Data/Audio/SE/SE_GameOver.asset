@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cc02a3baa5bdd4bb07b51b8e58d3cb, type: 3}
+  m_Name: SE_GameOver
+  m_EditorClassIdentifier: 
+  ID: SE_GameOver
+  AudioClip: {fileID: 8300000, guid: 502eededb5fd25b44bf7585fe07939f8, type: 3}
+  Tag:
+  - SE
