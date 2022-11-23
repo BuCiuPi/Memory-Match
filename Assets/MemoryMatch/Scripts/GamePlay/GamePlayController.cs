@@ -47,12 +47,12 @@ public class GamePlayController : MonoBehaviour
     }
     private IEnumerator CheckAnswerCo()
     {
+        yield return new WaitForSeconds(1f);
+
         int numberOfSelectItem = _answer.Count;
         Debug.Log("Item Selected: " + numberOfSelectItem);
         if (numberOfSelectItem < 2) yield break;
         m_isAnswerChecking = true;
-
-        yield return new WaitForSeconds(1f);
 
         bool answerResult = CompareAnswer(numberOfSelectItem);
         UpdateScore(answerResult);
@@ -66,8 +66,8 @@ public class GamePlayController : MonoBehaviour
 
     private bool CompareAnswer(int numberOfSelectItem)
     {
-
-        IItemCard firstAnswer = _answer[0];
+        
+        IItemCard firstAnswer = _answer?[0];
         for (int i = 1; i < numberOfSelectItem; i++)
         {
             if (!firstAnswer.IsDifference(_answer[i]))
