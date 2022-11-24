@@ -24,6 +24,7 @@ public class GamePlayController : MonoBehaviour
     public void Init()
     {
         _answer = new List<IItemCard>();
+        StopAllCoroutines();
     }
 
     void OnEnable()
@@ -47,12 +48,13 @@ public class GamePlayController : MonoBehaviour
     }
     private IEnumerator CheckAnswerCo()
     {
-        yield return new WaitForSeconds(1f);
 
         int numberOfSelectItem = _answer.Count;
         Debug.Log("Item Selected: " + numberOfSelectItem);
         if (numberOfSelectItem < 2) yield break;
         m_isAnswerChecking = true;
+
+        yield return new WaitForSeconds(1f);
 
         bool answerResult = CompareAnswer(numberOfSelectItem);
         UpdateScore(answerResult);
